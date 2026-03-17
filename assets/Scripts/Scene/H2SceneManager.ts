@@ -2,7 +2,7 @@
 import { _decorator, Component, instantiate, Node, Prefab } from 'cc';
 import { SceneManager } from './SceneManager';
 import DataManager from '../Runtime/DataManager';
-import { ItemStatusEnum, ItemTypeEnum } from '../Enum';
+import { ItemStatusEnum, ItemTypeEnum, SceneEnum } from '../Enum';
 const { ccclass, property } = _decorator;
 
 
@@ -14,6 +14,8 @@ export class H2SceneManager extends SceneManager{
     keyPlaceHolder: Node = null;
     @property(Prefab)
     keyPrefab: Prefab = null;
+
+    type:SceneEnum = SceneEnum.H2;
 
     render(){
         super.render();

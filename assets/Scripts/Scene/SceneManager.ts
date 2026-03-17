@@ -2,6 +2,7 @@
 import { _decorator, Component, director, instantiate, Node, Prefab } from 'cc';
 import { SceneEnum } from '../Enum';
 import { RenderManager } from '../Base/RenderManager';
+import DataManager from '../Runtime/DataManager';
 const { ccclass, property } = _decorator;
 
 
@@ -15,6 +16,8 @@ export class SceneManager extends RenderManager {
 
     @property(Prefab)
     inventoryPrefab: Prefab = null;
+
+    type:SceneEnum;
 
 
     start(){
@@ -32,14 +35,18 @@ export class SceneManager extends RenderManager {
     }
     
     changeScene(e:Event, Scene:string){
-        director.loadScene(Scene as SceneEnum);
 
-        console.log(Scene);
+        DataManager.Instance.curScene = Scene as SceneEnum;
+        // director.loadScene(Scene as SceneEnum);
 
     }
 
     render() {
-        
+        if(DataManager.Instance.curScene === this.type){
+            return;
+        }
+
+        director.loadScene(DataManager.Instance.curScene);
     }
 }
 
