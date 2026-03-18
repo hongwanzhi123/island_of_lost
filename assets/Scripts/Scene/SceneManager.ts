@@ -17,6 +17,9 @@ export class SceneManager extends RenderManager {
     @property(Prefab)
     inventoryPrefab: Prefab = null;
 
+    @property(Prefab)
+    menuPrefab: Prefab = null;
+
     type:SceneEnum;
 
 
@@ -31,13 +34,16 @@ export class SceneManager extends RenderManager {
             const inventory = instantiate(this.inventoryPrefab);
             this.node.addChild(inventory);
         }
+        if(this.menuPrefab){
+            const menu = instantiate(this.menuPrefab);
+            this.node.addChild(menu);
+        }
 
     }
     
     changeScene(e:Event, Scene:string){
 
         DataManager.Instance.curScene = Scene as SceneEnum;
-        // director.loadScene(Scene as SceneEnum);
 
     }
 

@@ -1,7 +1,11 @@
+import { sys, System } from "cc";
 import { Singlenton } from "../Base/Singleton";
 import { EventEnum, ItemStatusEnum, ItemTypeEnum, SceneEnum, TriggerStatusEnum } from "../Enum"
 import EventManager from "./EventManager";
 
+
+
+const STORAGE_KEY = 'STORAGE_KEY'
 
 interface IItem{
     type : ItemTypeEnum,
@@ -119,6 +123,55 @@ export default class DataManager extends Singlenton{
    render(){
     // 触发渲染
     EventManager.Instance.emit(EventEnum.Render);
+
+
+    sys.localStorage.setItem(STORAGE_KEY,JSON.stringify({
+        curItemType : this._curItemType,
+        isSelect : this._isSelect,
+        mailBoxStatus : this._mailBoxStatus,
+        grandmaStatus : this._grandmaStatus,
+        doorStatus : this._doorStatus,
+        grandmaDialogIndex : this._grandmaDialogIndex,
+        H2AData : this._H2AData,
+        curScene : this._curScene,
+        items : this._items,
+    }))
+
+   }
+
+   restore(){
+    const _data = sys.localStorage.getItem(STORAGE_KEY);
+    try{
+        const data = JSON.parse(_data);
+        this.H2AData = data.H2AData;
+        this.curItemType = data.curItemType;
+        this._isSelect = data.isSelect;
+        this.mailBoxStatus = data.mailBoxStatus;
+        this.grandmaStatus = data.grandmaStatus;
+        this.doorStatus = data.doorStatus;
+        this.grandmaDialogIndex = data.grandmaDialogIndex;
+        this.curScene = data.curScene;
+        this.items = data.items;
+
+    }catch(e){
+        this.reset();
+    }
+   }
+
+   reset(){
+         this.curItemType = null;
+    this.isSelect = false;
+    this.mailBoxStatus = TriggerStatusEnum.Pending;
+    this.grandmaStatus = TriggerStatusEnum.Pending;
+    this.doorStatus = TriggerStatusEnum.Pending;
+    this.grandmaDialogIndex = -1;
+    this.H2AData = [...this.H2AInitData];
+    this.curScene = SceneEnum.H1;
+    this.items= [
+        {type: ItemTypeEnum.Key, status: ItemStatusEnum.Scene},
+        {type: ItemTypeEnum.Mail, status: ItemStatusEnum.Disable},
+   ]
+
    }
 
 }
